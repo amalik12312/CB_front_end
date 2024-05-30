@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import { Recording } from "./Recording";
-import { useMicVAD } from "@ricky0123/vad-react";
+import { useMicVAD ,utils} from "@ricky0123/vad-react";
 
 function Home() {
   const [connected, setConnected] = useState(false);
@@ -44,11 +44,15 @@ function Home() {
     startOnLoad: true,
     onSpeechEnd: (audio) => {
       
-     // const audioBlob = new Blob(audio, { type: 'audio/wav' }); // or 'audio/webm' based on the format
-      socket.emit("audio_message", audio);
-      console.log("User stopped talking",audio)
+      const wavBuffer = utils.encodeWAV(audio)
+   
+
+      socket.emit("audio_message", wavBuffer);
+      
+      console.log("User stopped talking",wavBuffer)
     },
   })
+
 
 
   // manage audio playback
