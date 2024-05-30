@@ -1,13 +1,13 @@
 import React from "react";
+import { Mic_icon } from "./mic_icon/Mic_icon";
 
-export const Recording = ({recording,startRecording,stopRecording,}) => {
+
+export const Recording = ({vad}) => {
+  
   return (
-    <div>
-      {recording ? (
-        <button onClick={stopRecording}>Stop Recording</button>
-      ) : (
-        <button onClick={startRecording}>Start Recording</button>
-      )}
+    <div className="recording gradient-text" >
+      <Mic_icon/>
+      <div>{vad.userSpeaking ? "Listening..." : 'Not Listening' }</div>
     </div>
   );
 };

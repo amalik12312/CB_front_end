@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 import { Recording } from "./Recording";
+import { useMicVAD } from "@ricky0123/vad-react";
 
 function Home() {
-  const [recording, setRecording] = useState(false);
-  const [mediaRecorder, setMediaRecorder] = useState(null);
   const [connected, setConnected] = useState(false);
   const [socket, setSocket] = useState(null);
 
   const [audioQueue, setAudioQueue] = useState([]);
   const [currentAudio, setCurrentAudio] = useState(null);
+
+
 
   useEffect(() => {
     if (socket) {
@@ -38,6 +39,18 @@ function Home() {
     }
   }, [socket]);
 
+
+  const vad = useMicVAD({
+    startOnLoad: true,
+    onSpeechEnd: (audio) => {
+      
+     // const audioBlob = new Blob(audio, { type: 'audio/wav' }); // or 'audio/webm' based on the format
+      socket.emit("audio_message", audio);
+      console.log("User stopped talking",audio)
+    },
+  })
+
+
   // manage audio playback
   useEffect(() => {
     if (!currentAudio && audioQueue.length > 0) {
@@ -56,6 +69,16 @@ function Home() {
   }, [audioQueue, currentAudio]);
 
 
+  //clear audio when user speaks
+  useEffect(()=>{
+    if(vad.userSpeaking && currentAudio){
+      currentAudio.pause()
+      setAudioQueue([])
+      setCurrentAudio(null)
+    }
+  },[vad.userSpeaking])
+
+
   // manage socket connectivity
   const connectToServer = () => {
     const newSocket = io("http://192.168.68.106:5000");
@@ -70,37 +93,18 @@ function Home() {
     }
   };
 
-  const startRecording = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const recorder = new MediaRecorder(stream);
-    setMediaRecorder(recorder);
-
-    recorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        socket.emit("audio_message", event.data);
-        console.log(event.data);
-      }
-    };
-
-    recorder.start();
-    setRecording(true);
-  };
-
-  const stopRecording = () => {
-    mediaRecorder.stop();
-    setRecording(false);
-  };
 
   return (
     <div className="App">
-      <h1>WebSocket Audio Conversation</h1>
+      <h1 className="gradient-text">WebSocket Audio Conversation</h1>
+      <h2 className="gradient-text" style={{marginBottom:"70px"}}>Crafting digital solutions one line of code</h2>
       {connected ? (
-        <Recording startRecording={startRecording} stopRecording={stopRecording} recording={recording}/>
+        <Recording vad={vad}/>
       ) : (
-        <button onClick={connectToServer}>Connect to Server</button>
+        <button className="gradient-button"  onClick={connectToServer}>Connect to Server</button>
       )}
       {connected && (
-        <button onClick={disconnectFromServer}>Disconnect from Server</button>
+        <button className="gradient-button" onClick={disconnectFromServer}>Disconnect from Server</button>
       )}
     </div>
   );

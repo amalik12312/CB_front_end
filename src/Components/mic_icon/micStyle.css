@@ -1,0 +1,74 @@
+#DIV_2 {
+    height: 120px;
+    width: 120px;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    box-shadow: 0 0 70px rgb(2 253 68 / 50%), 0 0 70px rgba(0, 255, 0, 0.5), 0 0 60px rgba(0, 0, 255, 0.5);
+    background: rgb(0, 0, 0);
+    text-align: center;
+    font: 16px / 24px "Soehne Buch", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    animation: pulse-animation 4s infinite;
+
+}
+
+
+#DIV_3 {
+    position: relative;
+    height: 120px;
+    width: 120px;
+    border-radius: 9999px;
+    backdrop-filter: blur(23.5px);
+    background: rgba(0, 0, 0, 0) radial-gradient(54.28% 54.28% at 50% 49.91%, rgba(0, 0, 0, 0.11) 31.5%, rgba(128, 255, 204, 0.1) 83.01%, rgba(128, 255, 204, 0.26) 98%, rgba(255, 0, 0, 0.5) 100%) repeat scroll 0% 0% / auto padding-box border-box;
+
+    box-shadow: rgba(128, 255, 204, 0.02) -5.6px -5.6px 280.2px inset;
+    -webkit-border-radius: 9999px;
+    -moz-border-radius: 9999px;
+    -ms-border-radius: 9999px;
+    -o-border-radius: 9999px;
+}
+
+#DIV_4 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: rgb(255, 255, 255);
+}
+
+#svg_5 {
+    height: 32px;
+    width: 32px;
+    fill: none;
+    stroke: rgb(148, 255, 210);
+    stroke-width: 2px;
+}
+
+#path_6 {
+    fill: none;
+    stroke: rgb(148, 255, 210);
+    stroke-width: 2px;
+}
+
+@keyframes pulse-animation {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
